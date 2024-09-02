@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
+import java.util.List;
+
 @Service
 public class RoleService {
 
@@ -15,9 +17,8 @@ public class RoleService {
         this.roleRepository = roleRepository;
     }
 
-    public Role findByName(String name) {
-
-        return roleRepository.findByName(name);
+    public List <Role> findAll () {
+        return roleRepository.findAll();
     }
 }
 

@@ -16,8 +16,6 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,8 +23,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
-    @PersistenceContext
-    private EntityManager em;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -47,8 +43,6 @@ public class UserService implements UserDetailsService {
             return false;
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        user.setRoles(user.getRoles());
-        System.out.println(user.getRoles());
         userRepository.save(user);
         return true;
     }
@@ -64,7 +58,6 @@ public class UserService implements UserDetailsService {
         userRepository.save(existingUser);
     }
 
-
     public User findByName(String name) {
         return userRepository.findByName(name);
     }
@@ -76,11 +69,6 @@ public class UserService implements UserDetailsService {
             return true;
         }
         return false;
-    }
-
-    public List<User> usergtList(Long idMin) {
-        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                .setParameter("paramId", idMin).getResultList();
     }
 
     public User findById(Long id) {

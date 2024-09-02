@@ -5,14 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.Role;
+
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -37,11 +35,13 @@ public class AdminController {
     @GetMapping("/user")
     public String showUser(@RequestParam(value = "id") Long id, Model model) {
         model.addAttribute("user", userService.findById(id));
+        model.addAttribute("allRoles", roleService.findAll());
         return "show";
     }
 
     @GetMapping("/new")
-    public String createUser(@ModelAttribute("user") User user) {
+    public String createUser(@ModelAttribute("user") User user, Model model) {
+        model.addAttribute("allRoles", roleService.findAll());
         return "new";
     }
 
@@ -50,14 +50,7 @@ public class AdminController {
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "/new";
-//        if (role != null) {
-//            Set<Role> userRoles = role.stream()
-//                    .map(roleName -> roleService.findByName(roleName)) // Найдите роль по имени
-//                    .collect(Collectors.toSet());
-//            user.setRoles(userRoles);
-//        }
         userService.saveUser(user);
-
         return "redirect:/admin/";
     }
 

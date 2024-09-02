@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:form="http://www.w3.org/1999/xhtml"
       %@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <head>
     <meta charset="UTF-8">
@@ -37,35 +36,17 @@
     <input type="password" th:field="*{password}" id="password"/>
     <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
     <br>
+    <br>
 
-    <p>
-        <label>Roles:
-            <input type="checkbox" name="roles"
-                   th:each="role : ${allRoles}"
-                   th:text="${role.name}"
-                   th:value="${role.id}"
-                   th:field="*{roles}"
-            />
+
+    Role:
+    <div th:each="role : ${allRoles}">
+        <label>
+            <input type="checkbox" th:field="*{roles}" th:value="${role.id}"/>
+            <span th:text="${role.name}"></span>
         </label>
-    </p>
-<!--    <label><input type="checkbox" name="roles" value="ROLE_USER"> User</label>-->
-<!--    <br>-->
-<!--    <label><input type="checkbox" name="roles" value="ROLE_ADMIN"> Admin</label>-->
-<!--    <br>-->
+    </div>
 
-
-    <!--    <form>-->
-    <!--        <label for="User">-->
-    <!--            <input type="checkbox" id="User" name="User" value="User">-->
-    <!--            User-->
-    <!--        </label>-->
-    <!--        <br>-->
-    <!--        <label for="Admin">-->
-    <!--            <input type="checkbox" id="Admin" name="Admin" value="Admin">-->
-    <!--            Admin-->
-    <!--        </label>-->
-    <!--        <br>-->
-    <!--    </form>-->
 
     <input type="submit" value="Create!">
 
