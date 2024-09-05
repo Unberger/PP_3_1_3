@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public String pageForAuthenticatedUsers(Model model, Principal principal) {
+    public String openPageForAuthenticatedUsers(Model model, Principal principal) {
         model.addAttribute("user", userService.findByName(principal.getName()));
         return "user";
     }

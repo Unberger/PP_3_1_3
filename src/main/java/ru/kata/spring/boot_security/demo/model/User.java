@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -22,29 +23,29 @@ public class User implements UserDetails {
 
     @Column(name = "name")
     @NotEmpty(message = "Name should not be empty")
-    @Pattern(regexp = "[a-zA-Zа-яА-Я]+")
+//    @Pattern(regexp = "[a-zA-Zа-яА-Я]+")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String name;
 
     @Column(name = "last_name")
     @NotEmpty(message = "Last name should not be empty")
     @Size(min = 2, max = 30, message = "Last name should be between 2 and 30 characters")
-    @Pattern(regexp = "[a-zA-Zа-яА-Я]+")
+//    @Pattern(regexp = "[a-zA-Zа-яА-Я]+")
     private String lastName;
 
     @Column(name = "age")
-    @Min(value = 0, message = "Age should be greater than 0")
+//    @Min(value = 0, message = "Age should be greater than 0")
     private int age;
 
     @Column(name = "email")
     @NotEmpty(message = "Email should not be empty")
-    @Size(min = 2, max = 30, message = "Email should be between 2 and 30 characters")
+//    @Size(min = 2, max = 30, message = "Email should be between 2 and 30 characters")
     @Email
     private String email;
 
     @Column(name = "password")
     @NotEmpty(message = "Password should not be empty")
-    @Size(min = 2, max = 100, message = "Password should be between 2 and 30 characters")
+    @Size(min = 2, max = 60, message = "Password should be between 2 and 60 characters")
 //    @Pattern(regexp = "[a-zA-Zа-яА-Я0-9]+")
     private String password;
 
@@ -60,8 +61,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, String name, String lastName, int age, String email, String password) {
-        this.id = id;
+    public User(String name, String lastName, int age, String email, String password) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
@@ -124,6 +124,10 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -158,8 +162,20 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 17;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(name, user.name);
+    }
 }

@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.RoleService;
+import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
@@ -18,12 +18,12 @@ import javax.validation.Valid;
 public class AdminController {
 
     private final UserService userService;
-    private final RoleService roleService;
+    private final RoleServiceImpl roleServiceImpl;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public AdminController(UserService userService, RoleServiceImpl roleServiceImpl) {
         this.userService = userService;
-        this.roleService = roleService;
+        this.roleServiceImpl = roleServiceImpl;
     }
 
     @GetMapping("/")
@@ -35,13 +35,13 @@ public class AdminController {
     @GetMapping("/user")
     public String showUser(@RequestParam(value = "id") Long id, Model model) {
         model.addAttribute("user", userService.findById(id));
-        model.addAttribute("allRoles", roleService.findAll());
+        model.addAttribute("allRoles", roleServiceImpl.findAll());
         return "show";
     }
 
     @GetMapping("/new")
     public String createUser(@ModelAttribute("user") User user, Model model) {
-        model.addAttribute("allRoles", roleService.findAll());
+        model.addAttribute("allRoles", roleServiceImpl.findAll());
         return "new";
     }
 
@@ -66,8 +66,7 @@ public class AdminController {
 
     @DeleteMapping("/user/delete")
     public String delete(@RequestParam(value = "id") Long id) {
-        userService.deleteUser(id);
-
+        userService.deleteUserById(id);
         return "redirect:/admin/";
     }
 
