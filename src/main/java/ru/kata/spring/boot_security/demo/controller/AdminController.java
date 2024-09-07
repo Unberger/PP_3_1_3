@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.validation.Valid;
 
@@ -17,24 +17,24 @@ import javax.validation.Valid;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final RoleServiceImpl roleServiceImpl;
 
     @Autowired
-    public AdminController(UserService userService, RoleServiceImpl roleServiceImpl) {
-        this.userService = userService;
+    public AdminController(UserServiceImpl userServiceImpl, RoleServiceImpl roleServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
         this.roleServiceImpl = roleServiceImpl;
     }
 
     @GetMapping("/")
     public String showAllUsers(Model model) {
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("users", userServiceImpl.findAll());
         return "showAll";
     }
 
     @GetMapping("/user")
     public String showUser(@RequestParam(value = "id") Long id, Model model) {
-        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("user", userServiceImpl.findById(id));
         model.addAttribute("allRoles", roleServiceImpl.findAll());
         return "show";
     }
@@ -50,7 +50,7 @@ public class AdminController {
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "/new";
-        userService.saveUser(user);
+        userServiceImpl.saveUser(user);
         return "redirect:/admin/";
     }
 
@@ -60,13 +60,13 @@ public class AdminController {
                          @RequestParam(value = "id") Long id) {
         if (bindingResult.hasErrors())
             return "/show";
-        userService.update(id, user);
+        userServiceImpl.update(id, user);
         return "redirect:/admin/";
     }
 
     @DeleteMapping("/user/delete")
     public String delete(@RequestParam(value = "id") Long id) {
-        userService.deleteUserById(id);
+        userServiceImpl.deleteUserById(id);
         return "redirect:/admin/";
     }
 

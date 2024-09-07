@@ -34,7 +34,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @Column(name = "age")
-//    @Min(value = 0, message = "Age should be greater than 0")
+    @Min(value = 0, message = "Age should be greater than 0")
     private int age;
 
     @Column(name = "email")

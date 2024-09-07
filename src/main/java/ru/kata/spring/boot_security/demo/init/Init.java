@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -15,12 +15,12 @@ import java.util.List;
 @Component
 public class Init {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final RoleServiceImpl roleService;
 
     @Autowired
-    public Init(UserService userService, RoleServiceImpl roleService) {
-        this.userService = userService;
+    public Init(UserServiceImpl userServiceImpl, RoleServiceImpl roleService) {
+        this.userServiceImpl = userServiceImpl;
         this.roleService = roleService;
     }
 
@@ -56,7 +56,7 @@ public class Init {
         user2.setRoles(userRoles2);
 
 
-        userService.saveUser(user1);
-        userService.saveUser(user2);
+        userServiceImpl.saveUser(user1);
+        userServiceImpl.saveUser(user2);
     }
 }
