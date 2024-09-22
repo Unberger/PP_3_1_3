@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +36,7 @@ public class User implements UserDetails {
 
     @Column(name = "age")
     @Min(value = 0, message = "Age should be greater than 0")
-    private int age;
+    private Integer age;
 
     @Column(name = "email")
     @NotEmpty(message = "Email should not be empty")
@@ -61,7 +62,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String lastName, int age, String email, String password) {
+    public User(String name, String lastName, Integer age, String email, String password) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
@@ -100,11 +101,11 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

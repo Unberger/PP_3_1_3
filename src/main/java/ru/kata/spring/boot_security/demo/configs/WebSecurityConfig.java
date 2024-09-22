@@ -36,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/", "/user/**").hasRole("USER")
+
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(successUserHandler)
@@ -58,3 +59,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationProvider;
     }
 }
+
+//                .antMatchers("/admin/**","/user/**","/user").hasRole("ADMIN")
+//                .antMatchers("/user/", "/user/**").hasRole("USER")
