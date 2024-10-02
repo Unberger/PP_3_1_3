@@ -41,30 +41,29 @@ public class Init {
 
         List<Role> userRoles3 = new ArrayList<>();
         userRoles3.add(role1);
-//        userRoles3.add(role2);
 
         User user1 = new User();
-        user1.setName("Nikita");
-        user1.setLastName("Pastukhov");
+        user1.setFirstName("User");
+        user1.setLastName("Eee");
         user1.setAge(23);
-        user1.setEmail("abcddfddfdfds@ya.ru");
+        user1.setEmail("user@w.c");
         user1.setPassword("100");
         user1.setRoles(userRoles1);
 
         User user2 = new User();
-        user2.setName("Www");
-        user2.setLastName("Pastukhova");
+        user2.setFirstName("Www");
+        user2.setLastName("Www");
         user2.setAge(23);
-        user2.setEmail("abcddfddfdfdsa@ya.ru");
-        user2.setPassword("111");
+        user2.setEmail("www@ya.ru");
+        user2.setPassword("100");
         user2.setRoles(userRoles2);
 
         User user3 = new User();
-        user3.setName("Qqq");
-        user3.setLastName("Pastukhovewa");
+        user3.setFirstName("Qqq");
+        user3.setLastName("Qqq");
         user3.setAge(11);
-        user3.setEmail("qweqwesd@ya.ru");
-        user3.setPassword("111");
+        user3.setEmail("qqqqq@ya.ru");
+        user3.setPassword("100");
         user3.setRoles(userRoles3);
 
 

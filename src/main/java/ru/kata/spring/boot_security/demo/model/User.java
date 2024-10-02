@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,11 +21,11 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "first_name")
     @NotEmpty(message = "Name should not be empty")
 //    @Pattern(regexp = "[a-zA-Zа-яА-Я]+")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
-    private String name;
+    private String firstName;
 
     @Column(name = "last_name")
     @NotEmpty(message = "Last name should not be empty")
@@ -50,7 +49,7 @@ public class User implements UserDetails {
 //    @Pattern(regexp = "[a-zA-Zа-яА-Я0-9]+")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -62,12 +61,21 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String lastName, Integer age, String email, String password) {
-        this.name = name;
+    public User(String firstName, String lastName, Integer age, String email, String password) {
+        this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.email = email;
         this.password = password;
+    }
+
+    public User(String firstName, String lastName, Integer age, String email, String password, List<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
     public void addRoleToUser(Role role) {
@@ -85,12 +93,12 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -131,7 +139,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return getRoles();
     }
 
     public String getPassword() {
@@ -140,7 +148,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getName();
+        return getFirstName();
     }
 
     @Override
@@ -177,6 +185,6 @@ public class User implements UserDetails {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id) &&
-                Objects.equals(name, user.name);
+                Objects.equals(firstName, user.firstName);
     }
 }

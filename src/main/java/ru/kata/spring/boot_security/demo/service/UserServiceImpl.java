@@ -32,14 +32,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         this.userRepository = userRepository;
     }
 
+    public void update(User user) {
+        userRepository.save(user);
+    }
+
     @Override
     @Transactional
     public boolean saveUser(User user) {
-        User userFromDB = userRepository.findByName(user.getUsername());
-        if (userFromDB != null) {
-            return false;
-        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(user.getRoles());
         userRepository.save(user);
         return true;
     }
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public void update(Long id, User user) {
         User existingUser = userRepository.getById(id);
-        existingUser.setName(user.getName());
+        existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setAge(user.getAge());
         existingUser.setEmail(user.getEmail());
@@ -60,8 +61,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public User findByName(String name) {
-        return userRepository.findByName(name);
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -89,12 +90,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = userRepository.findByName(name);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException(String.format("User '%s' not found", name));
+            throw new UsernameNotFoundException(String.format("User '%s' not found", email));
         }
-        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));
     }
 

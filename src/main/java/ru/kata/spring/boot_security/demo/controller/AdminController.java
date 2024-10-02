@@ -27,37 +27,38 @@ public class AdminController {
         this.roleServiceImpl = roleServiceImpl;
     }
 
+    @GetMapping
+    public String openPageForAdmins(Model model, Principal principal) {
+        model.addAttribute("loginUser", userServiceImpl.findByEmail(principal.getName()));
+        model.addAttribute("users", userServiceImpl.findAll());
+        model.addAttribute("newUser", new User());
+        model.addAttribute("allRoles", roleServiceImpl.findAll());
+        return "pageForAdmins";
+    }
+
     @GetMapping("/")
     public String showAllUsers(Model model) {
         model.addAttribute("users", userServiceImpl.findAll());
         return "showAll";
     }
 
-    @GetMapping("/user")
-    public String showUser(Model model) {
-        model.addAttribute("newUser", new User());
-        model.addAttribute("allRoles", roleServiceImpl.findAll());
-        return "show";
+    @PostMapping("/update")
+    public String update(@ModelAttribute("editUser") User editUser) {
+        userServiceImpl.update(editUser);
+        return "redirect:/admin";
     }
 
-    @GetMapping
-    public String openPageForAuthenticatedAdmins(Model model, Principal principal) {
-        model.addAttribute("user", userServiceImpl.findByName(principal.getName()));
-        model.addAttribute("newUser", new User());
+    @GetMapping("/user/edit/{id}")
+    public String editUserForm(@PathVariable Long id, Model model) {
+        model.addAttribute("editUser", userServiceImpl.findById(id));
         model.addAttribute("allRoles", roleServiceImpl.findAll());
         return "pageForAdmins";
     }
-//    @GetMapping("/user")
-//    public String showUser(@RequestParam(value = "id") Long id, Model model) {
-//        model.addAttribute("user", userServiceImpl.findById(id));
-//        model.addAttribute("allRoles", roleServiceImpl.findAll());
-//        return "show";
-//    }
 
-    @GetMapping("/new")
-    public String createUser(@ModelAttribute("user") User user, Model model) {
-        model.addAttribute("allRoles", roleServiceImpl.findAll());
-        return "new";
+    @PatchMapping("/user/edit/{id}")
+    public String updateUser(@ModelAttribute("editUser") User user, @PathVariable Long id) {
+        userServiceImpl.update(id, user);
+        return "redirect:/admin/users";
     }
 
     @PostMapping
@@ -68,23 +69,13 @@ public class AdminController {
 
         model.addAttribute("user", new User());
         userServiceImpl.saveUser(user);
-        return "redirect:/user";
+        return "redirect:/admin";
     }
 
-    @PatchMapping("/user/edit")
-    public String update(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult,
-                         @RequestParam(value = "id") Long id) {
-        if (bindingResult.hasErrors())
-            return "/show";
-        userServiceImpl.update(id, user);
-        return "redirect:/admin/";
-    }
-
-    @DeleteMapping("/user/delete")
-    public String delete(@RequestParam(value = "id") Long id) {
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") Long id) {
         userServiceImpl.deleteUserById(id);
-        return "redirect:/admin/";
+        return "redirect:/admin";
     }
 
 
