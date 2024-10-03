@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -21,35 +20,27 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "first_name")
     @NotEmpty(message = "Name should not be empty")
-//    @Pattern(regexp = "[a-zA-Zа-яА-Я]+")
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
-    private String name;
+    private String firstName;
 
     @Column(name = "last_name")
     @NotEmpty(message = "Last name should not be empty")
-    @Size(min = 2, max = 30, message = "Last name should be between 2 and 30 characters")
-//    @Pattern(regexp = "[a-zA-Zа-яА-Я]+")
     private String lastName;
 
     @Column(name = "age")
-    @Min(value = 0, message = "Age should be greater than 0")
-    private int age;
+    private Integer age;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @NotEmpty(message = "Email should not be empty")
-//    @Size(min = 2, max = 30, message = "Email should be between 2 and 30 characters")
     @Email
     private String email;
 
     @Column(name = "password")
     @NotEmpty(message = "Password should not be empty")
-    @Size(min = 2, max = 60, message = "Password should be between 2 and 60 characters")
-//    @Pattern(regexp = "[a-zA-Zа-яА-Я0-9]+")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -61,19 +52,21 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String lastName, int age, String email, String password) {
-        this.name = name;
+    public User(String firstName, String lastName, Integer age, String email, String password) {
+        this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.email = email;
         this.password = password;
     }
 
-    public void addRoleToUser(Role role) {
-        if (roles == null) {
-            roles = new ArrayList<>();
-        }
-        roles.add(role);
+    public User(String firstName, String lastName, Integer age, String email, String password, List<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -84,12 +77,12 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -100,11 +93,11 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -130,7 +123,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return getRoles();
     }
 
     public String getPassword() {
@@ -139,7 +132,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getName();
+        return email;
     }
 
     @Override
@@ -176,6 +169,6 @@ public class User implements UserDetails {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id) &&
-                Objects.equals(name, user.name);
+                Objects.equals(firstName, user.firstName);
     }
 }
