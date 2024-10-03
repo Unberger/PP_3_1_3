@@ -7,8 +7,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
-import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
+import ru.kata.spring.boot_security.demo.service.RoleService;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -18,63 +18,61 @@ import java.security.Principal;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserServiceImpl userServiceImpl;
-    private final RoleServiceImpl roleServiceImpl;
+    private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public AdminController(UserServiceImpl userServiceImpl, RoleServiceImpl roleServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
-        this.roleServiceImpl = roleServiceImpl;
+    public AdminController(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping
     public String openPageForAdmins(Model model, Principal principal) {
-        model.addAttribute("loginUser", userServiceImpl.findByEmail(principal.getName()));
-        model.addAttribute("users", userServiceImpl.findAll());
+        model.addAttribute("loginUser", userService.findByEmail(principal.getName()));
+        model.addAttribute("users", userService.findAll());
         model.addAttribute("newUser", new User());
-        model.addAttribute("allRoles", roleServiceImpl.findAll());
+        model.addAttribute("allRoles", roleService.findAll());
         return "pageForAdmins";
     }
 
     @GetMapping("/")
     public String showAllUsers(Model model) {
-        model.addAttribute("users", userServiceImpl.findAll());
+        model.addAttribute("users", userService.findAll());
         return "showAll";
     }
 
     @PostMapping("/update")
     public String update(@ModelAttribute("editUser") User editUser) {
-        userServiceImpl.update(editUser);
-        return "redirect:/admin";
+        userService.update(editUser);
+        return "/admin";
     }
 
     @GetMapping("/user/edit/{id}")
     public String editUserForm(@PathVariable Long id, Model model) {
-        model.addAttribute("editUser", userServiceImpl.findById(id));
-        model.addAttribute("allRoles", roleServiceImpl.findAll());
+        model.addAttribute("editUser", userService.findById(id));
+        model.addAttribute("allRoles", roleService.findAll());
         return "pageForAdmins";
     }
 
     @PatchMapping("/user/edit/{id}")
     public String updateUser(@ModelAttribute("editUser") User user, @PathVariable Long id) {
-        userServiceImpl.update(id, user);
+        userService.update(id, user);
         return "redirect:/admin/users";
     }
 
     @PostMapping
     public String create(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult, Model model) {
+                         BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "/new";
-
-        model.addAttribute("user", new User());
-        userServiceImpl.saveUser(user);
+        userService.saveUser(user);
         return "redirect:/admin";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id) {
-        userServiceImpl.deleteUserById(id);
+        userService.deleteUserById(id);
         return "redirect:/admin";
     }
 

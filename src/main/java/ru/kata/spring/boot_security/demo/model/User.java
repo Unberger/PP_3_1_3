@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -23,30 +22,22 @@ public class User implements UserDetails {
 
     @Column(name = "first_name")
     @NotEmpty(message = "Name should not be empty")
-//    @Pattern(regexp = "[a-zA-Zа-яА-Я]+")
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String firstName;
 
     @Column(name = "last_name")
     @NotEmpty(message = "Last name should not be empty")
-    @Size(min = 2, max = 30, message = "Last name should be between 2 and 30 characters")
-//    @Pattern(regexp = "[a-zA-Zа-яА-Я]+")
     private String lastName;
 
     @Column(name = "age")
-    @Min(value = 0, message = "Age should be greater than 0")
     private Integer age;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @NotEmpty(message = "Email should not be empty")
-//    @Size(min = 2, max = 30, message = "Email should be between 2 and 30 characters")
     @Email
     private String email;
 
     @Column(name = "password")
     @NotEmpty(message = "Password should not be empty")
-    @Size(min = 2, max = 60, message = "Password should be between 2 and 60 characters")
-//    @Pattern(regexp = "[a-zA-Zа-яА-Я0-9]+")
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -76,13 +67,6 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
         this.roles = roles;
-    }
-
-    public void addRoleToUser(Role role) {
-        if (roles == null) {
-            roles = new ArrayList<>();
-        }
-        roles.add(role);
     }
 
     public Long getId() {
@@ -148,7 +132,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getFirstName();
+        return email;
     }
 
     @Override
