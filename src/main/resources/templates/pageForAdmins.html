@@ -95,7 +95,6 @@
                                         </tr>
                                         </thead>
                                         <tbody id="users-table-body">
-                                        <!-- Данные будут загружаться через JS -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -141,7 +140,6 @@
                                         <div class="form-group">
                                             <label for="roles"><strong>Roles</strong></label>
                                             <select multiple class="form-control" id="roles" name="roles">
-                                                <!-- Роли загружаются через JavaScript -->
                                             </select>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Create</button>
@@ -150,6 +148,7 @@
                             </div>
                         </div>
 
+                        <!-- Модальное окно для изменения пользователя -->
                         <div id="editUserModal" class="modal fade" tabindex="-1" role="dialog"
                              aria-labelledby="editModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -195,7 +194,6 @@
                                             <div class="form-group">
                                                 <label for="editRoles"><strong>Role</strong></label>
                                                 <select multiple class="form-control" id="editRoles" name="editRoles">
-                                                    <!-- Роли будут загружаться через JS -->
                                                 </select>
                                             </div>
                                             <div class="modal-footer">
@@ -211,7 +209,7 @@
                             </div>
                         </div>
 
-                        <!-- Delete User Popup -->
+                        <!-- Модальное окно для удаления пользователя -->
                         <div id="deleteUserModal" class="modal fade" tabindex="-1" role="dialog"
                              aria-labelledby="deleteModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -259,7 +257,6 @@
                                                     <label for="deleteRoles"><strong>Role</strong></label>
                                                     <select multiple class="form-control" id="deleteRoles"
                                                             name="deleteRoles" readonly>
-                                                        <!-- Роли будут загружаться через JS -->
                                                     </select>
                                                 </div>
                                                 <div class="modal-footer">
